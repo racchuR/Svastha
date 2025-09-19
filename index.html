@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Om Chanting Helper</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 350px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 2px solid #29434e;
+    background-color: #d0e0e3;
+    color: #0f1214;
+    text-align: center;
+  }
+  button {
+    padding: 12px 20px;
+    margin: 10px;
+    font-size: 16px;
+    background-color: #29434e;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 140px;
+  }
+  button:hover {
+    background-color: #476d7d;
+  }
+  #timer {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+  .status {
+    margin: 8px 0;
+    font-weight: bold;
+  }
+  #alert {
+    background-color: #f8bbc0;
+    color: #6c1a21;
+    padding: 6px;
+    border-radius: 4px;
+    margin-top: 15px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <h1>Om Chanting Helper</h1>
+  <div id="timer">00:00</div>
+  <div class="status" id="postureStatus">Posture: Unknown</div>
+  <div class="status" id="eyesStatus">Eyes: Unknown</div>
+  <button id="startButton">Start Chanting</button>
+  <button id="stopButton">Stop Chanting</button>
+  <div id="alert">TEST ALERT</div>
+
+<script>
+  let timerInterval = null;
+  let chantStartSeconds = 0;
+
+  function updateTimer() {
+    chantStartSeconds++;
+    let m = Math.floor(chantStartSeconds / 60);
+    let s = chantStartSeconds % 60;
+    document.getElementById('timer').textContent =
+      (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+  }
+
+  function startChanting() {
+    chantStartSeconds = 0;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(updateTimer, 1000);
+
+    // Simulate 's' key press via fetch call to backend API or other method here
+    // Because your backend listens for 's' key press, we'll alert user to press 's' key or you can 
+    // add some websocket in backend to listen to frontend start event if you extend backend.
+    alert("Press 's' on your backend terminal to start chanting");
+
+    // For demo, set dummy status texts
+    document.getElementById('postureStatus').textContent = "Posture: Good";
+    document.getElementById('eyesStatus').textContent = "Eyes: Open";
+    document.getElementById('alert').style.display = 'none';
+  }
+
+  function stopChanting() {
+    clearInterval(timerInterval);
+    chantStartSeconds = 0;
+    document.getElementById('timer').textContent = '00:00';
+
+    // Simulate 'e' key press or backend stop chanting
+    alert("Press 'e' on your backend terminal to stop chanting");
+
+    document.getElementById('postureStatus').textContent = "Posture: Unknown";
+    document.getElementById('eyesStatus').textContent = "Eyes: Unknown";
+    document.getElementById('alert').style.display = 'block';
+  }
+
+  document.getElementById('startButton').onclick = startChanting;
+  document.getElementById('stopButton').onclick = stopChanting;
+</script>
+</body>
+</html>
