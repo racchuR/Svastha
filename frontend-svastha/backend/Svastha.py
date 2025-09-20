@@ -165,6 +165,10 @@ class OmChantingGuide:
         return 0
     
     def run(self):
+        spine_ok = False
+        head_ok = False
+        eyes_open = False
+
         """Main processing loop"""
         while self.cap.isOpened():
             ret, frame = self.cap.read()
