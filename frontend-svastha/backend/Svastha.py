@@ -183,11 +183,11 @@ class OmChantingGuide:
         self.cap.release()
         cv2.destroyAllWindows()
     def get_status(self):
-    return {
-        "posture": self.posture_status,
-        "eyes": self.eyes_status,
-        "chanting_active": self.chanting_active,
-        "chant_duration": time.time() - self.chant_start_time if self.chanting_active else 0
+        return {
+            "posture": self.posture_status,
+            "eyes": self.eyes_status,
+            "chanting_active": self.chanting_active,
+            "chant_duration": time.time() - self.chant_start_time if self.chanting_active else 0
     }
 
         
