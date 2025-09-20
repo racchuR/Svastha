@@ -42,7 +42,12 @@ class OmChantingGuide:
             'neck': 0,
             'eyes': 0
         }
-        self.alert_cooldown = 3  # seconds between alerts
+        self.alert_cooldown = 3
+        self.chanting_active = False
+        self.posture_status = "Unknown"
+        self.eyes_status = "Unknown"
+
+        # seconds between alerts
         
     def calculate_spine_alignment(self, landmarks):
         """Calculate spine alignment using shoulder and hip positions"""
@@ -120,19 +125,21 @@ class OmChantingGuide:
                 print(f"Alert: {alert_type}")  # Fallback to text
     
     def start_chant(self):
-        """Start chanting timer"""
+    if not self.chanting_active:
         self.chant_start_time = time.time()
         pygame.mixer.Sound(CHANT_START_SOUND).play()
-    
+        self.chanting_active = True
+        print("Chanting started")
+
     def end_chant(self):
-        """End chanting and report duration"""
-        if self.chant_start_time:
-            self.chant_duration = time.time() - self.chant_start_time
-            pygame.mixer.Sound(CHANT_END_SOUND).play()
-            print(f"Chanting duration: {self.chant_duration:.2f} seconds")
-            self.chant_start_time = None
-            return self.chant_duration
-        return 0
+    if self.chanting_active:
+        self.chant_duration = time.time() - self.chant_start_time
+        pygame.mixer.Sound(CHANT_END_SOUND).play()
+        print(f"Chanting duration: {self.chant_duration:.2f} seconds")
+        self.chant_start_time = None
+        self.chanting_active = False
+        return self.chant_duration
+    return 0
     
     def run(self):
         """Main processing loop"""
@@ -151,39 +158,39 @@ class OmChantingGuide:
             # Check posture if pose landmarks detected
             if pose_results.pose_landmarks:
                 landmarks = pose_results.pose_landmarks.landmark
-                
-                # Check spine alignment
                 spine_ok = self.calculate_spine_alignment(landmarks)
+                self.posture_status = "Good" if spine_ok else "Bad"
                 if not spine_ok:
                     self.play_alert('spine')
-                
-                # Check head alignment
+    
                 head_ok = self.calculate_head_alignment(landmarks)
                 if not head_ok:
                     self.play_alert('neck')
-            
-            # Check eye state if face landmarks detected
-            if face_results.multi_face_landmarks:
-                for face_landmarks in face_results.multi_face_landmarks:
-                    eyes_open = self.are_eyes_open(face_landmarks.landmark)
-                    if eyes_open:
-                        self.play_alert('eyes')
+
+             if face_results.multi_face_landmarks:
+                 for face_landmarks in face_results.multi_face_landmarks:
+                     eyes_open = self.are_eyes_open(face_landmarks.landmark)
+                     self.eyes_status = "Open" if eyes_open else "Closed"
+                     if eyes_open:
+                         self.play_alert('eyes')
+
             
             # Display the frame (optional for debugging)
             cv2.imshow('Om Chanting Guide', frame)
             
-            # Handle key presses
-            key = cv2.waitKey(5) & 0xFF
-            if key == ord('q'):  # Quit
-                break
-            elif key == ord('s'):  # Start chanting
-                self.start_chant()
-            elif key == ord('e'):  # End chanting
-                self.end_chant()
-        
+            
         # Cleanup
         self.cap.release()
         cv2.destroyAllWindows()
+    def get_status(self):
+    return {
+        "posture": self.posture_status,
+        "eyes": self.eyes_status,
+        "chanting_active": self.chanting_active,
+        "chant_duration": time.time() - self.chant_start_time if self.chanting_active else 0
+    }
+
+        
 
 if __name__ == "__main__":
     guide = OmChantingGuide()
