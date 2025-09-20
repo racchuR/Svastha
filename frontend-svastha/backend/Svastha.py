@@ -167,7 +167,7 @@ class OmChantingGuide:
                 if not head_ok:
                     self.play_alert('neck')
 
-             if face_results.multi_face_landmarks:
+            if face_results.multi_face_landmarks:
                  for face_landmarks in face_results.multi_face_landmarks:
                      eyes_open = self.are_eyes_open(face_landmarks.landmark)
                      self.eyes_status = "Open" if eyes_open else "Closed"
