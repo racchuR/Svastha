@@ -132,22 +132,20 @@ class OmChantingGuide:
 
     def update_alerts(self, spine_ok, head_ok, eyes_open):
         if not spine_ok and not self.alert_active['spine']:
-        self.play_alert('spine')
-        self.alert_active['spine'] = True
-elif spine_ok:
-        self.alert_active['spine'] = False
-
-    if not head_ok and not self.alert_active['neck']:
-        self.play_alert('neck')
-        self.alert_active['neck'] = True
-    elif head_ok:
-        self.alert_active['neck'] = False
-
-    if eyes_open and not self.alert_active['eyes']:
-        self.play_alert('eyes')
-        self.alert_active['eyes'] = True
-    elif not eyes_open:
-        self.alert_active['eyes'] = False
+            self.play_alert('spine')
+            self.alert_active['spine'] = True
+        elif spine_ok:
+            self.alert_active['spine'] = False
+            if not head_ok and not self.alert_active['neck']:
+                self.play_alert('neck')
+                self.alert_active['neck'] = True
+            elif head_ok:
+                self.alert_active['neck'] = False
+                if eyes_open and not self.alert_active['eyes']:
+                    self.play_alert('eyes')
+                    self.alert_active['eyes'] = True
+                elif not eyes_open:
+                    self.alert_active['eyes'] = False
 
     def start_chant(self):
         if not self.chanting_active:
