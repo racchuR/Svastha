@@ -20,9 +20,9 @@ pygame.mixer.init()
 
 # Load audio files (replace with your actual file paths)
 ALERT_SOUNDS = {
-    'spine': r'C:\Users\HP\OneDrive\Desktop\spine_alert.wav',
-    'neck': r'C:\Users\HP\OneDrive\Desktop\neck_alert.wav',
-    'eyes': r'C:\Users\HP\OneDrive\Desktop\eyes_alert.wav'
+    'spine': r'C:\Users\HP\OneDrive\Desktop\spine.wav',
+    'neck': r'C:\Users\HP\OneDrive\Desktop\neck.wav',
+    'eyes': r'C:\Users\HP\OneDrive\Desktop\eyes.wav'
 }
 CHANT_START_SOUND = r'C:\Users\HP\OneDrive\Desktop\start_chant.wav'
 CHANT_END_SOUND = r'C:\Users\HP\OneDrive\Desktop\end_chant.wav'
