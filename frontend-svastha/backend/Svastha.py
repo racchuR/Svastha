@@ -131,7 +131,7 @@ class OmChantingGuide:
                 print(f"Alert: {alert_type}")  # Fallback to text
 
     def update_alerts(self, spine_ok, head_ok, eyes_open):
-        if not spine_ok and not self.alert_active['spine']
+        if not spine_ok and not self.alert_active['spine']:
         self.play_alert('spine')
         self.alert_active['spine'] = True
 elif spine_ok:
