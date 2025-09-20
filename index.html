@@ -68,35 +68,48 @@
       (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
   }
 
-  function startChanting() {
-    chantStartSeconds = 0;
-    clearInterval(timerInterval);
-    timerInterval = setInterval(updateTimer, 1000);
+function startChanting() {
+  fetch('/start', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      document.getElementById('alert').style.display = 'none';
+      chantStartSeconds = 0;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimer, 1000);
+    })
+    .catch(err => console.error('Error starting chant:', err));
+}
+ function stopChanting() {
+  fetch('/stop', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      document.getElementById('alert').style.display = 'block';
+      clearInterval(timerInterval);
+      chantStartSeconds = 0;
+      document.getElementById('timer').textContent = '00:00';
+      document.getElementById('postureStatus').textContent = "Posture: Unknown";
+      document.getElementById('eyesStatus').textContent = "Eyes: Unknown";
+    })
+    .catch(err => console.error('Error stopping chant:', err));
+}
+  function pollStatus() {
+  fetch('/status')
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('postureStatus').textContent = 'Posture: ' + data.posture;
+      document.getElementById('eyesStatus').textContent = 'Eyes: ' + data.eyes;
+      if (data.chanting_active) {
+        chantStartSeconds = Math.floor(data.chant_duration);
+      }
+    })
+    .catch(err => console.error('Error fetching status:', err));
+}
 
-    // Simulate 's' key press via fetch call to backend API or other method here
-    // Because your backend listens for 's' key press, we'll alert user to press 's' key or you can 
-    // add some websocket in backend to listen to frontend start event if you extend backend.
-    alert("Press 's' on your backend terminal to start chanting");
-
-    // For demo, set dummy status texts
-    document.getElementById('postureStatus').textContent = "Posture: Good";
-    document.getElementById('eyesStatus').textContent = "Eyes: Open";
-    document.getElementById('alert').style.display = 'none';
-  }
-
-  function stopChanting() {
-    clearInterval(timerInterval);
-    chantStartSeconds = 0;
-    document.getElementById('timer').textContent = '00:00';
-
-    // Simulate 'e' key press or backend stop chanting
-    alert("Press 'e' on your backend terminal to stop chanting");
-
-    document.getElementById('postureStatus').textContent = "Posture: Unknown";
-    document.getElementById('eyesStatus').textContent = "Eyes: Unknown";
-    document.getElementById('alert').style.display = 'block';
-  }
-
+// Start polling every second
+setInterval(pollStatus, 1000);
+pollStatus();
   document.getElementById('startButton').onclick = startChanting;
   document.getElementById('stopButton').onclick = stopChanting;
 </script>
