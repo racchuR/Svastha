@@ -1,4 +1,4 @@
-from svastha import OmChantingGuide
+from Svastha import OmChantingGuide
 from flask import Flask, jsonify, request
 from threading import Thread
 import time
