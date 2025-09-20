@@ -129,7 +129,26 @@ class OmChantingGuide:
                 self.last_alert_time[alert_type] = current_time
             except:
                 print(f"Alert: {alert_type}")  # Fallback to text
-    
+
+    def update_alerts(self, spine_ok, head_ok, eyes_open):
+    if not spine_ok and not self.alert_active['spine']:
+        self.play_alert('spine')
+        self.alert_active['spine'] = True
+    elif spine_ok:
+        self.alert_active['spine'] = False
+
+    if not head_ok and not self.alert_active['neck']:
+        self.play_alert('neck')
+        self.alert_active['neck'] = True
+    elif head_ok:
+        self.alert_active['neck'] = False
+
+    if eyes_open and not self.alert_active['eyes']:
+        self.play_alert('eyes')
+        self.alert_active['eyes'] = True
+    elif not eyes_open:
+        self.alert_active['eyes'] = False
+
     def start_chant(self):
         if not self.chanting_active:
             self.chant_start_time = time.time()
@@ -166,19 +185,14 @@ class OmChantingGuide:
                 landmarks = pose_results.pose_landmarks.landmark
                 spine_ok = self.calculate_spine_alignment(landmarks)
                 self.posture_status = "Good" if spine_ok else "Bad"
-                if not spine_ok:
-                    self.play_alert('spine')
     
                 head_ok = self.calculate_head_alignment(landmarks)
-                if not head_ok:
-                    self.play_alert('neck')
 
             if face_results.multi_face_landmarks:
                  for face_landmarks in face_results.multi_face_landmarks:
                      eyes_open = self.are_eyes_open(face_landmarks.landmark)
                      self.eyes_status = "Open" if eyes_open else "Closed"
-                     if eyes_open:
-                         self.play_alert('eyes')
+            self.update_alerts(spine_ok,head_ok,eyes_open)
 
             
             # Display the frame (optional for debugging)
