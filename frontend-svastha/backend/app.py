@@ -1,5 +1,5 @@
 from Svastha import OmChantingGuide
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,render_template
 from threading import Thread
 import time
 
@@ -8,6 +8,10 @@ app = Flask(__name__)
 guide = OmChantingGuide()
 thread = Thread(target=guide.run, daemon=True)
 thread.start()
+
+@app.route('/')
+def home():
+    return render_template("index.html")
 
 @app.route('/start', methods=['POST'])
 def start_chant():
