@@ -46,8 +46,12 @@ class OmChantingGuide:
         self.chanting_active = False
         self.posture_status = "Unknown"
         self.eyes_status = "Unknown"
-
-        # seconds between alerts
+        
+        self.alert_cooldown = 3
+        self.chanting_active = False
+        self.posture_status = "Unknown"
+        self.eyes_status = "Unknown"
+  # seconds between alerts
         
     def calculate_spine_alignment(self, landmarks):
         """Calculate spine alignment using shoulder and hip positions"""
