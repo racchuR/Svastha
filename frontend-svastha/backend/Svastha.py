@@ -125,21 +125,21 @@ class OmChantingGuide:
                 print(f"Alert: {alert_type}")  # Fallback to text
     
     def start_chant(self):
-    if not self.chanting_active:
-        self.chant_start_time = time.time()
-        pygame.mixer.Sound(CHANT_START_SOUND).play()
-        self.chanting_active = True
-        print("Chanting started")
+        if not self.chanting_active:
+            self.chant_start_time = time.time()
+            pygame.mixer.Sound(CHANT_START_SOUND).play()
+            self.chanting_active = True
+            print("Chanting started")
 
     def end_chant(self):
-    if self.chanting_active:
-        self.chant_duration = time.time() - self.chant_start_time
-        pygame.mixer.Sound(CHANT_END_SOUND).play()
-        print(f"Chanting duration: {self.chant_duration:.2f} seconds")
-        self.chant_start_time = None
-        self.chanting_active = False
-        return self.chant_duration
-    return 0
+        if self.chanting_active:
+            self.chant_duration = time.time() - self.chant_start_time
+            pygame.mixer.Sound(CHANT_END_SOUND).play()
+            print(f"Chanting duration: {self.chant_duration:.2f} seconds")
+            self.chant_start_time = None
+            self.chanting_active = False
+            return self.chant_duration
+        return 0
     
     def run(self):
         """Main processing loop"""
