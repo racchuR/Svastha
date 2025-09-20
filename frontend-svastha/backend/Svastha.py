@@ -47,10 +47,12 @@ class OmChantingGuide:
         self.posture_status = "Unknown"
         self.eyes_status = "Unknown"
         
-        self.alert_cooldown = 3
-        self.chanting_active = False
-        self.posture_status = "Unknown"
-        self.eyes_status = "Unknown"
+        self.alert_active = {
+        'spine': False,
+        'neck': False,
+        'eyes': False
+    }
+       
   # seconds between alerts
         
     def calculate_spine_alignment(self, landmarks):
